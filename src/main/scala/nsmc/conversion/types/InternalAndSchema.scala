@@ -45,6 +45,8 @@ object InternalAndSchema {
   private def toInternal(sf: StructField) : (String, ConversionType) = {
     sf.dataType match {
       // TODO: leaving out some of the atomic types
+      case DateType => (sf.name, AtomicType(DateType))
+      case DoubleType => (sf.name, AtomicType(DoubleType))
       case StringType => (sf.name, AtomicType(StringType))
       case IntegerType => (sf.name, AtomicType(IntegerType))
       case StructType(s) => (sf.name, toInternal(s))
