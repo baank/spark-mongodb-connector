@@ -2,8 +2,6 @@ package nsmc.conversion.types
 
 import org.apache.spark.sql.types._
 
-import scala.collection.immutable.HashMap
-
 
 class InternalAndSchema {
 
@@ -12,6 +10,17 @@ class InternalAndSchema {
 object InternalAndSchema {
 
   def toSchema(it: ConversionType) : DataType = {
+    it match {
+      case AtomicType(dt: DataType) => dt
+      case SequenceType(et) => ArrayType(toSchema(et))
+      case StructureType(fields) => {
+        val converted = fields.map(kv => makeField(kv._1, toSchema(kv._2))).toSeq
+        StructType(converted)
+      }
+    }
+  }
+
+  def toSortedSchema(it: ConversionType) : DataType = {
     it match {
       case AtomicType(dt: DataType) => dt
       case SequenceType(et) => ArrayType(toSchema(et))
@@ -29,7 +38,7 @@ object InternalAndSchema {
 
   def toInternal(schema: Seq[StructField]) : ConversionType = {
     val convertedPairs = schema.toSeq.map(toInternal)
-    val hm = HashMap[String, ConversionType](convertedPairs:_*)
+    val hm = convertedPairs.toMap
     new StructureType(hm)
   }
 

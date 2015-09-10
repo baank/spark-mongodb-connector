@@ -6,7 +6,7 @@ import com.mongodb.casbah.Imports._
 import nsmc.conversion.SchemaAccumulator
 import org.apache.spark.sql.types._
 
-import scala.collection.immutable.HashMap
+import scala.collection.immutable.{TreeMap, HashMap}
 
 class MongoAndInternal {
 
@@ -14,14 +14,14 @@ class MongoAndInternal {
 
 object MongoAndInternal {
   def toInternal(o: MongoDBObject) : StructureType = {
-    val convertedPairs = o.toSeq.map(kv => toInternal(kv))
-    val hm = HashMap[String, ConversionType](convertedPairs:_*)
+    val convertedPairs = o.toSeq.map(kv => toInternal(kv)).toSeq
+    val hm = convertedPairs.toMap //HashMap[String, ConversionType](convertedPairs:_*)
     new StructureType(hm)
   }
 
   def toInternal(o: BasicDBObject) : StructureType = {
-    val convertedPairs = o.toSeq.map(kv => toInternal(kv))
-    val hm = HashMap[String, ConversionType](convertedPairs:_*)
+    val convertedPairs = o.toSeq.map(kv => toInternal(kv)).toSeq
+    val hm = TreeMap[String, ConversionType](convertedPairs:_*)//convertedPairs.toMap //HashMap[String, ConversionType](convertedPairs:_*)
     new StructureType(hm)
   }
 
@@ -30,7 +30,7 @@ object MongoAndInternal {
       case d: Date => AtomicType(TimestampType)
       case bts: BSONTimestamp => {
         val s = Seq("inc" -> AtomicType(IntegerType), "time" -> AtomicType(IntegerType))
-        StructureType(HashMap[String, ConversionType](s: _*))
+        StructureType(s.toMap)
       }
       case ba: Array[Byte] => AtomicType(BinaryType)
       case bt: org.bson.types.ObjectId => AtomicType(StringType)
