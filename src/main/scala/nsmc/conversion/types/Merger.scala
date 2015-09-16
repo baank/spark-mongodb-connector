@@ -1,6 +1,6 @@
 package nsmc.conversion.types
 
-import scala.collection.immutable.TreeMap
+import scala.collection.immutable.HashMap
 
 object Merger {
   def merge(l: ConversionType, r: ConversionType) : ConversionType = {
@@ -17,7 +17,7 @@ object Merger {
             case (false, false) => (k, null) // can't happen
           }
         })
-        val ct = new StructureType(TreeMap[String, ConversionType](pairs.toSeq:_*))
+        val ct = new StructureType(HashMap[String, ConversionType](pairs.toSeq:_*))
         ct
       }
       case (_, _) => l // TODO: assume for now they're equal

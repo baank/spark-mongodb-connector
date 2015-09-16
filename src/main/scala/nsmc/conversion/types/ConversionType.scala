@@ -9,9 +9,10 @@ abstract class ConversionType extends Serializable {
 
 case class AtomicType(dt: DataType) extends ConversionType with Serializable {}
 
-case class StructureType(fields: Map[String, ConversionType]) extends ConversionType {
+case class StructureType(fields: HashMap[String, ConversionType]) extends ConversionType {
   def sortedFields = {
-    fields.toSeq
+    val unsortedFields = fields.toSeq
+    unsortedFields.sortBy({ case (name, _) => name })
   }
 }
 

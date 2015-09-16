@@ -4,7 +4,7 @@ import nsmc.conversion.types._
 
 import org.apache.spark.sql.types._
 
-import scala.collection.immutable.TreeMap
+import scala.collection.immutable.HashMap
 
 class SchemaAccumulator {
   private var currentInternal: Option[ConversionType] = None
@@ -30,14 +30,14 @@ class SchemaAccumulator {
   def getInternal : ConversionType = {
     currentInternal match {
       case Some(i) => i
-      case None => new StructureType(new TreeMap[String, ConversionType]())
+      case None => new StructureType(new HashMap[String, ConversionType]())
     }
   }
 
   // should only be called for a top level (record) schema
   def getSchema : Seq[StructField] = {
     currentInternal match {
-      case Some(i) => InternalAndSchema.toSortedSchema(i).asInstanceOf[StructType].fields
+      case Some(i) => InternalAndSchema.toSchema(i).asInstanceOf[StructType].fields
       case None => Seq()
     }
 
