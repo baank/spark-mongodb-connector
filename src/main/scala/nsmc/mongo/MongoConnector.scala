@@ -21,8 +21,8 @@ private[nsmc] class MongoConnector(databaseName: String, collectionName: String,
     val db = mongoClient.getDB(databaseName)
     val col = db(collectionName)
 
-    logDebug(s"filter: '${filter.toString}'")
-    logDebug(s"keys: '${keys.toString}'")
+    logInfo(s"filter: '${filter.toString}'")
+    logInfo(s"keys: '${keys.toString}'")
     val cursor = col.find(filter, keys)
     val withMin = if (interval.min == null || interval.min.values.size == 0) cursor else cursor.addSpecial("$min", interval.min)
     val withMax = if (interval.max == null || interval.max.values.size == 0) withMin else cursor.addSpecial("$max", interval.max)

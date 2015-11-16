@@ -44,6 +44,10 @@ class QueryGenerator {
         }
       }
       case IsNull(attr) => Some(attr, null)
+      case IsNotNull(attr) => Some(attr, MongoDBObject("$ne" -> None))
+      case StringContains(attr, v) => Some(attr, (".*" + convertUTF8(v) + ".*").r)
+      case StringStartsWith(attr, v) => Some(attr, ("^" + convertUTF8(v) + ".*$").r)
+      case StringEndsWith(attr, v) => Some(attr, ("^.*" + convertUTF8(v) + "$").r)
       case _ => None
     }
   }

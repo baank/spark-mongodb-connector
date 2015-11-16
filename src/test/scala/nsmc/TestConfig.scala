@@ -11,8 +11,8 @@ object TestConfig {
   val mongosHost = "pegasus"
   val mongosPort = "27033"
 
-  val mongodHost = "pegasus"
-  val mongodPort = "27030"
+  val mongodHost = "localhost"
+  val mongodPort = "27017"
 
   val mongodAuthHost = "pegasus"
   val mongodAuthPort = "27034"
@@ -57,7 +57,8 @@ object TestConfig {
       col += MongoDBObject("key" -> i) ++ ("s" -> ("K_" + i))
     }
 
-    col.ensureIndex(DBObject("key" -> 1, "s" -> -1))
+    // TODO: Fix for latest Casbah version
+    //col.ensureIndex(DBObject("key" -> 1, "s" -> -1))
   }
 
   def main(args: Array[String]) {

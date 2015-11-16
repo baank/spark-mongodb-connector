@@ -17,9 +17,9 @@ class ProjectionTests extends FlatSpec with Matchers {
       col.drop()
       col += MongoDBObject("f1" -> 1)
       col += MongoDBObject("f1" -> 2) ++ ("f2" -> "S2") ++ ("f3" -> 102)
-      col += MongoDBObject("f3" -> 202)
+      col += MongoDBObject("f3" -> 202L)
       col += MongoDBObject("f1" -> 4) ++ ("f2" -> "S4")
-    } finally {
+     } finally {
       mongoClient.close()
     }
 
@@ -47,7 +47,7 @@ class ProjectionTests extends FlatSpec with Matchers {
       val fields = data.schema.fields
       fields should have size (2)
       fields(0) should be (new StructField("f1", IntegerType, true))
-      fields(1) should be (new StructField("f3", IntegerType, true))
+      fields(1) should be (new StructField("f3", LongType, true))
 
       data.count() should be (4)
 
@@ -60,7 +60,7 @@ class ProjectionTests extends FlatSpec with Matchers {
       results(1).getInt(1) should be (102)
 
       results(2).isNullAt(0) should be (true)
-      results(2).getInt(1) should be (202)
+      results(2).getLong(1) should be (202L)
 
       results(3).getInt(0) should be (4)
       results(3).isNullAt(1) should be (true)

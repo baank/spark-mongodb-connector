@@ -108,6 +108,106 @@ class QueryGeneratorTests extends FlatSpec with Matchers {
 
   }
 
+  "projecting one column with a null filter" should
+    "yield one column in two rows" in new Builder {
+
+    try {
+
+      val filters : Array[Filter] = Array(IsNull("f4"))
+      val columns = Array("f4")
+
+      val results = query(filters, columns)
+
+      results.size should be (2)
+      results(0).keySet().size() should be (1)
+      results(0).get("f4") should be (null)
+
+    } finally {
+      close()
+    }
+
+  }
+
+  "projecting one column with a not null filter" should
+    "yield one column in three rows" in new Builder {
+
+    try {
+
+      val filters : Array[Filter] = Array(IsNotNull("f4"))
+      val columns = Array("f4")
+
+      val results = query(filters, columns)
+
+      results.size should be (3)
+      results(0).keySet().size() should be (1)
+      results(0).get("f4") should be (1)
+
+    } finally {
+      close()
+    }
+
+  }
+
+  "projecting one column with a string contains filter" should
+    "yield one column in one row" in new Builder {
+
+    try {
+
+      val filters : Array[Filter] = Array(StringContains("f3", "S"))
+      val columns = Array("f3")
+
+      val results = query(filters, columns)
+
+      results.size should be (5)
+      results(0).keySet().size() should be (1)
+      results(0).get("f3") should be ("S1")
+
+    } finally {
+      close()
+    }
+
+  }
+
+  "projecting one column with a string starts with filter" should
+    "yield one column in five rows" in new Builder {
+
+    try {
+
+      val filters : Array[Filter] = Array(StringStartsWith("f3", "S"))
+      val columns = Array("f3")
+
+      val results = query(filters, columns)
+
+      results.size should be (5)
+      results(0).keySet().size() should be (1)
+      results(0).get("f3") should be ("S1")
+
+    } finally {
+      close()
+    }
+
+  }
+
+  "projecting one column with a string ends with filter" should
+    "yield one column in five rows" in new Builder {
+
+    try {
+
+      val filters : Array[Filter] = Array(StringEndsWith("f3", "1"))
+      val columns = Array("f3")
+
+      val results = query(filters, columns)
+
+      results.size should be (1)
+      results(0).keySet().size() should be (1)
+      results(0).get("f3") should be ("S1")
+
+    } finally {
+      close()
+    }
+
+  }
+
   "projecting one column with an 'in' filter" should
     "yield one column in two rows" in new Builder {
 
