@@ -6,6 +6,7 @@ It has the following changes:
  * Support for additional data types (Long, Decimal, Date, Double) 
  * Forced partitioning by _id (MongoDB's default primary key)
 
+The plan is to push these upstream.
 
 # NSMC: A Native MongoDB Connector for Apache Spark
 
