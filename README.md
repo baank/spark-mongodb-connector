@@ -1,3 +1,12 @@
+Note this is an currently incompatible fork of the original Spark MongoDB connector.
+
+It has the following changes:
+
+ * Support for additional predicate pushdowns (Not Null, String Contains, String Starts With, String Ends With)
+ * Support for additional data types (Long, Decimal, Date, Double) 
+ * Forced partitioning by _id (MongoDB's default primary key)
+
+
 # NSMC: A Native MongoDB Connector for Apache Spark
 
 This is a native connector for reading and writing MongoDB collections
